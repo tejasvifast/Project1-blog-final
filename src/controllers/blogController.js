@@ -25,7 +25,7 @@ const createBlog = async (req, res) => {
 
         let { authorId, title, body, tags, category, subcategory, isPublished } = data
 
-        if (tags) {
+        if (tags) {   //array   , string ,object string
             if (Array.isArray(tags)) tags = tags.map(el => el.trim()).filter(el => el)
             if (Object.prototype.toString.call(tags) === "[object String]") tags = tags.trim()
         }
@@ -50,7 +50,7 @@ const createBlog = async (req, res) => {
         if (!category) return res.status(400).send({ Message: "Category is required...!" });
         if (keyValid(category)) return res.status(400).send({ status: false, Message: "category should be valid" })
 
-        let repeativeData = await blogModel.find({ body: body })
+        let repeativeData = await blogModel.find({ body: body }) 
         if (!repeativeData.length == 0) return res.status(400).send({ status: false, Message: "you are creating repeative blog again with same body" })
 
         let createdBlog = await blogModel.create(data)
@@ -170,7 +170,7 @@ const deleteBlogs = async function (req, res) {
         const queryParams = req.query
         const authorIdFromToken = req.decodedAuthorId
 
-        if (!validObjectId(authorIdFromToken)) return res.status(400).send({ status: false, Message: 'No query param received,aborting delete operation' })
+        if (!validRequestBody(queryParams)) return res.status(400).send({ status: false, Message: 'No query param received,aborting delete operation' })
 
         const { authorId, category, tags, subcategory, isPublished } = queryParams
 
