@@ -1,21 +1,24 @@
 const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken")
+//#################################################################################################################################################
+//VALIDATIONS
 
-let keyValid = function (value) {
+const keyValid = function (value) {
     if (typeof (value) == "undefined" || typeof (value) == null) { return true }
     if (typeof (value) === "string" && value.trim().length == 0) { return true }
     return false
 }
-let validTitle = function (value) {
+const validTitle = function (value) {
     return ["Mr", "Mrs", "Miss"].indexOf(value.trim()) !== -1
 }
-let validRequestBody = function(value){
+const validRequestBody = function(value){
     return Object.keys(value).length > 0
 }
 
-let createAuthor = async (req, res) => {
+//#################################################################################################################################################
+const createAuthor = async (req, res) => {
     try {
-        data = req.body
+        const data = req.body
         const { fname, lname, title, email, password } = data
         if(!validRequestBody(data)) return res.status(400).send({status:false,Message:"Invalid Request Parameter ,Please provide Author Details"})
 
@@ -29,7 +32,7 @@ let createAuthor = async (req, res) => {
         if (!validTitle(title)) return res.status(400).send({ status: false, Message: `${title}  -> title should be valid` })
 
         if (!email) return res.status(400).send({ status: false, Message: "email is required...." });
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) return res.status(400).send({ status: false, Message: "Invalid email format" })
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) return res.status(400).send({ status: false, Message: `${email} -> Invalid email format` })
 
         if (!password) return res.status(400).send({ status: false, Message: "password is required....." });
         if (keyValid(password)) return res.status(400).send({ status: false, Message: "password should be valid" })
@@ -45,9 +48,10 @@ let createAuthor = async (req, res) => {
     }
 }
 
-let loginAuthor = async (req, res) => {
-    let data = req.body
-    let { email, password } = data
+//#################################################################################################################################################
+const loginAuthor = async (req, res) => {
+    const data = req.body
+    const { email, password } = data
     if(!validRequestBody(data)) return res.status(400).send({status:false,Message:"Invalid Request Parameter ,Please provide Login Details"})
     
     if (!email) return res.status(400).send({ status: false, Message: "email is required...." });
@@ -56,14 +60,15 @@ let loginAuthor = async (req, res) => {
     if (!password) return res.status(400).send({ status: false, Message: "password is required....." });
     if (keyValid(password)) return res.status(400).send({ status: false, Message: "password should be valid" })
 
-    let validAuthor = await authorModel.findOne({ email: email, password: password })
+    const validAuthor = await authorModel.findOne({ email: email, password: password })
     if (!validAuthor) return res.status(400).send({ status: false, Message: "Wrong login Credentials" })
 
-    let authorId = validAuthor._id
-    let token = await jwt.sign({ authorId: authorId }, "functionUp project1Blog (@#$%^&)")
+    const authorId = validAuthor._id
+    const token = await jwt.sign({ authorId: authorId }, "functionUp project1Blog (@#$%^&)")
     // res.setHeader("X-api-token", token)
     return res.status(201).send({ status: true,Message:"Author Login Successfully", data: {token} })
 }
 
+//#################################################################################################################################################
 module.exports.createAuthor = createAuthor
 module.exports.loginAuthor = loginAuthor

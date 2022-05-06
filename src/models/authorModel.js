@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const authormodel = new mongoose.Schema({
     fname: {
-        type: String, required: true, trim: true, //match: [/^[a-zA-Z]+$/, 'is invalid']
+        type: String, required: true, trim: true, 
     },
     lname: {
-        type: String, required: true, trim: true,//match: [/^[a-zA-Z]+$/, 'is invalid']
+        type: String, required: true, trim: true,
     },
     title: {
         type: String, required: true, trim: true, enum: ["Mr", "Mrs", "Miss"],
