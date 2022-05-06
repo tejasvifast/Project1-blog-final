@@ -1,5 +1,6 @@
 const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken")
+
 //#################################################################################################################################################
 //VALIDATIONS
 
@@ -8,9 +9,11 @@ const keyValid = function (value) {
     if (typeof (value) === "string" && value.trim().length == 0) { return true }
     return false
 }
+
 const validTitle = function (value) {
     return ["Mr", "Mrs", "Miss"].indexOf(value.trim()) !== -1
 }
+
 const validRequestBody = function(value){
     return Object.keys(value).length > 0
 }
@@ -20,6 +23,7 @@ const createAuthor = async (req, res) => {
     try {
         const data = req.body
         const { fname, lname, title, email, password } = data
+
         if(!validRequestBody(data)) return res.status(400).send({status:false,Message:"Invalid Request Parameter ,Please provide Author Details"})
 
         if (!fname) return res.status(400).send({ status: false, Message: "fname is required...." });
@@ -49,9 +53,11 @@ const createAuthor = async (req, res) => {
 }
 
 //#################################################################################################################################################
+
 const loginAuthor = async (req, res) => {
     const data = req.body
     const { email, password } = data
+    
     if(!validRequestBody(data)) return res.status(400).send({status:false,Message:"Invalid Request Parameter ,Please provide Login Details"})
     
     if (!email) return res.status(400).send({ status: false, Message: "email is required...." });

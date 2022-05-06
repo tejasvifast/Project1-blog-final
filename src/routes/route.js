@@ -7,6 +7,8 @@ const middleWare =require("../middleWare/middleWare")
 
 router.post('/Authors',authorController.createAuthor) //done
 
+router.post("/login",authorController.loginAuthor)   //done
+
 router.post("/Blogs" ,middleWare.authenticate,blogController.createBlog)    //done     
 
 router.get("/getBlogs",middleWare.authenticate,blogController.getblog)   //done 
@@ -17,7 +19,6 @@ router.delete('/blogs/:blogId',middleWare.authenticate, middleWare.authorize,blo
 
 router.delete("/blogs",middleWare.authenticate, middleWare.authorizeForDelete,blogController.deleteBlogs)   //done
 
-router.post("/login",authorController.loginAuthor)   //done
 
 
 module.exports = router; 
